@@ -1,1 +1,2 @@
-# companion-module-signularlive-studio
+# companion-module-singularlive-studio
+See HELP.md and LICENSE
