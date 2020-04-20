@@ -13,53 +13,69 @@ class instance extends instance_skel {
 			...actions
 		})
 
-		
+
 		return this
 	}
-	
+
 	init() {
-		this.updateConfig(this.config)
+		this.initSingularLive(this.config)
 	}
-	
-	async updateConfig(config) {
+
+	updateConfig(config) {
+		this.config = config
+		this.initSingularLive(this.config)
+	}
+
+	async initSingularLive(config) {
 		try {
 			this.SingularLive = new api(config.user, config.pass)
 			this.SingularLive.setShow(config.showid)
-			
-			await this.SingularLive.testConnection()
-			.then(res => {
-				for(let i = 0; i < res.length; i++) {
-					this.log('info', res[i].name + ' (' + res[i].id + ')')
-				}
-			})
-			.catch(err => {
-				throw new Error(err)
-			})
-			
+
+			await this.SingularLive.Connect()
+				.then(res => {
+					for (let i = 0; i < res.length; i++) {
+						this.log('info', res[i].name + ' (' + res[i].id + ')')
+					}
+
+				})
+				.catch(err => {
+					this.log('warn', err)
+					throw new Error(err)
+				})
+
+			await this.SingularLive.validateShow()
+				.catch(err => {
+					this.log('warn', err)
+					throw new Error(err)
+				})
 			const compositions = []
 			const controlnodes = []
 			await this.SingularLive.getElements()
-			.then(res => {
-				for(let i = 0; i < res.length; i++) {
-					if(res[i].name) {
-						compositions.push({
-							id: res[i].name,
-							label: res[i].name
-						})
-						
-						if(res[i].nodes) {
-							const keys = Object.keys(res[i].nodes.payload)
-							for (let j = 0; j < keys.length; j++) {
-								controlnodes.push({
-									id: res[i].name + '&!&!&' + keys[j], 
-									label: res[i].name + ' / ' + keys[j]
-								})
+				.then(res => {
+					for (let i = 0; i < res.length; i++) {
+						if (res[i].name) {
+							compositions.push({
+								id: res[i].name,
+								label: res[i].name
+							})
+
+							if (res[i].nodes) {
+								const keys = Object.keys(res[i].nodes.payload)
+								for (let j = 0; j < keys.length; j++) {
+									controlnodes.push({
+										id: res[i].name + '&!&!&' + keys[j],
+										label: res[i].name + ' / ' + keys[j]
+									})
+								}
 							}
 						}
 					}
-				}
-			})
-			
+				})
+				.catch(err => {
+					this.log('warn', err)
+					throw new Error(err)
+				})
+
 			this.system.emit('instance_actions', this.id, this.getActions(compositions, controlnodes))
 
 			this.status(this.STATUS_OK, 'OK')
@@ -121,9 +137,9 @@ class instance extends instance_skel {
 	}
 
 	action({ action, options }) {
-			this[action](options)
-				.then(() => { this.status(this.STATUS_OK, 'Ready') })
-				.catch((e) => { this.handleError(e) })
+		this[action](options)
+			.then(() => { this.status(this.STATUS_OK, 'Ready') })
+			.catch((e) => { this.handleError(e) })
 	}
 }
 
