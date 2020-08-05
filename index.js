@@ -28,26 +28,20 @@ class instance extends instance_skel {
 
 	async initSingularLive(config) {
 		try {
-			this.SingularLive = new api(config.user, config.pass)
-			this.SingularLive.setShow(config.showid)
+			this.SingularLive = new api(config.apiurl)
 
 			await this.SingularLive.Connect()
-				.then(res => {
-					for (let i = 0; i < res.length; i++) {
-						this.log('info', res[i].name + ' (' + res[i].id + ')')
+				.catch(err => {
+					if (err.toLowerCase() == 'not found') {
+						const str = 'Invalid url/token'
+						this.log('warn', str)
+						throw new Error(str)
+					} else {
+						this.log('warn', err)
+						throw new Error(err)
 					}
-
-				})
-				.catch(err => {
-					this.log('warn', err)
-					throw new Error(err)
 				})
 
-			await this.SingularLive.validateShow()
-				.catch(err => {
-					this.log('warn', err)
-					throw new Error(err)
-				})
 			const compositions = []
 			const controlnodes = []
 			await this.SingularLive.getElements()
@@ -96,28 +90,14 @@ class instance extends instance_skel {
 				id: 'info',
 				width: 12,
 				label: 'Information',
-				value: 'Username and password for the user connected to the Singular.Live Studio'
+				value: 'This module requires an API key to be filled in. This is generated in the Manage Access settings window from the Control application. \ni.e. https://app.singular.live/apiv1/control/172pQ2N1HLagEeayAci0Z4'
 			},
 			{
 				type: 'textinput',
-				id: 'user',
-				label: 'Email',
-				width: 6,
+				id: 'apiurl',
+				label: 'API URL',
+				width: 12,
 				default: '',
-			},
-			{
-				type: 'textinput',
-				id: 'pass',
-				label: 'Password',
-				width: 6,
-				default: ''
-			},
-			{
-				type: 'textinput',
-				id: 'showid',
-				label: 'Control App ID',
-				width: 6,
-				default: ''
 			}
 		]
 	}
