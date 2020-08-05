@@ -6,5 +6,4 @@
 
 ***
 
-The Control App ID can be found in the URL of the control app. 
-For example app.singular.live/appinstances/`XXXXXX`/control, or in the info dialog of a show. In the info console of the Companion UI there will also be printed all the shows with ID's assosiated with the account given.
+Access the Singular Live REST API commands. This module requires an API URL or API TOKEN. This URL/TOKEN is generated in the Manage Access settings window from the Control application. i.e. https://app.singular.live/apiv1/control/172pQ2N1HLagEeayAci0Z4 or 172pQ2N1HLagEeayAci0Z4
