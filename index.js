@@ -44,6 +44,9 @@ class instance extends instance_skel {
 
 			const compositions = []
 			const controlnodes = []
+			const buttons = []
+			const checkboxes = []
+
 			await this.SingularLive.getElements()
 				.then(res => {
 					for (let i = 0; i < res.length; i++) {
@@ -56,10 +59,27 @@ class instance extends instance_skel {
 							if (res[i].nodes) {
 								const keys = Object.keys(res[i].nodes.payload)
 								for (let j = 0; j < keys.length; j++) {
-									controlnodes.push({
-										id: res[i].name + '&!&!&' + keys[j],
-										label: res[i].name + ' / ' + keys[j]
-									})
+									const nodetype = typeof res[i].nodes.payload[keys[j]]
+									console.log(keys[j] + ' is ' + nodetype)
+
+									if (nodetype == 'string') {
+										controlnodes.push({
+											id: res[i].name + '&!&!&' + keys[j],
+											label: res[i].name + ' / ' + keys[j]
+										})
+									} else if (nodetype == 'object') {
+										if (Object.keys(res[i].nodes.payload[keys[j]]).includes('__singularButton')) {
+											buttons.push({
+												id: res[i].name + '&!&!&' + keys[j],
+												label: res[i].name + ' / ' + keys[j]
+											})
+										}
+									} else if (nodetype == 'boolean') {
+										checkboxes.push({
+											id: res[i].name + '&!&!&' + keys[j],
+											label: res[i].name + ' / ' + keys[j]
+										})
+									}
 								}
 							}
 						}
@@ -69,8 +89,7 @@ class instance extends instance_skel {
 					this.log('warn', err)
 					throw new Error(err)
 				})
-
-			this.system.emit('instance_actions', this.id, this.getActions(compositions, controlnodes))
+			this.system.emit('instance_actions', this.id, this.getActions(compositions, controlnodes, buttons, checkboxes))
 
 			this.status(this.STATUS_OK, 'OK')
 		} catch (e) {
