@@ -46,6 +46,7 @@ class instance extends instance_skel {
 			const controlnodes = []
 			const buttons = []
 			const checkboxes = []
+			const timers = []
 
 			await this.SingularLive.getElements()
 				.then(res => {
@@ -67,8 +68,14 @@ class instance extends instance_skel {
 											label: res[i].name + ' / ' + keys[j]
 										})
 									} else if (nodetype == 'object') {
-										if (Object.keys(res[i].nodes.payload[keys[j]]).includes('__singularButton')) {
+										let types = Object.keys(res[i].nodes.payload[keys[j]])
+										if (types.includes('__singularButton')) {
 											buttons.push({
+												id: res[i].name + '&!&!&' + keys[j],
+												label: res[i].name + ' / ' + keys[j]
+											})
+										} else if (types.includes('isRunning')) {
+											timers.push({
 												id: res[i].name + '&!&!&' + keys[j],
 												label: res[i].name + ' / ' + keys[j]
 											})
@@ -88,7 +95,7 @@ class instance extends instance_skel {
 					this.log('warn', err)
 					throw new Error(err)
 				})
-			this.system.emit('instance_actions', this.id, this.getActions(compositions, controlnodes, buttons, checkboxes))
+			this.system.emit('instance_actions', this.id, this.getActions(compositions, controlnodes, buttons, checkboxes, timers))
 
 			this.status(this.STATUS_OK, 'OK')
 		} catch (e) {
