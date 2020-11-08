@@ -60,7 +60,6 @@ class instance extends instance_skel {
 								const keys = Object.keys(res[i].nodes.payload)
 								for (let j = 0; j < keys.length; j++) {
 									const nodetype = typeof res[i].nodes.payload[keys[j]]
-									console.log(keys[j] + ' is ' + nodetype)
 
 									if (nodetype == 'string') {
 										controlnodes.push({
