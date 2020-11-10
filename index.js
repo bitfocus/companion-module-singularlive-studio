@@ -58,33 +58,25 @@ class instance extends instance_skel {
 							})
 
 							if (res[i].nodes) {
-								const keys = Object.keys(res[i].nodes.payload)
-								for (let j = 0; j < keys.length; j++) {
-									const nodetype = typeof res[i].nodes.payload[keys[j]]
+								let nodes = res[i].nodes.reduce(((r, c) => Object.assign(r, c)), {})
 
-									if (nodetype == 'string') {
-										controlnodes.push({
-											id: res[i].name + '&!&!&' + keys[j],
-											label: res[i].name + ' / ' + keys[j]
-										})
-									} else if (nodetype == 'object') {
-										let types = Object.keys(res[i].nodes.payload[keys[j]])
-										if (types.includes('__singularButton')) {
-											buttons.push({
-												id: res[i].name + '&!&!&' + keys[j],
-												label: res[i].name + ' / ' + keys[j]
-											})
-										} else if (types.includes('isRunning')) {
-											timers.push({
-												id: res[i].name + '&!&!&' + keys[j],
-												label: res[i].name + ' / ' + keys[j]
-											})
-										}
-									} else if (nodetype == 'boolean') {
-										checkboxes.push({
-											id: res[i].name + '&!&!&' + keys[j],
-											label: res[i].name + ' / ' + keys[j]
-										})
+								const keys = Object.keys(nodes)
+								for (let j = 0; j < keys.length; j++) {
+									const nodetype = nodes[keys[j]]
+
+									const node = {
+										id: res[i].name + '&!&!&' + keys[j],
+										label: res[i].name + ' / ' + keys[j]
+									}
+
+									if (nodetype == 'text' || nodetype == 'number' || nodetype == 'textarea' || nodetype == 'image') {
+										controlnodes.push(node)
+									} else if (nodetype == 'button') {
+										buttons.push(node)
+									} else if (nodetype == 'timecontrol') {
+										timers.push(node)
+									} else if (nodetype == 'checkbox') {
+										checkboxes.push(node)
 									}
 								}
 							}
