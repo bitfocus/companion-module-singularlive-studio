@@ -62,21 +62,21 @@ class instance extends instance_skel {
 
 								const keys = Object.keys(nodes)
 								for (let j = 0; j < keys.length; j++) {
-									const nodetype = nodes[keys[j]]
+									const node = nodes[keys[j]]
 
-									const node = {
-										id: res[i].name + '&!&!&' + keys[j],
+									const controlNode = {
+										id: res[i].name + '&!&!&' + node.id,
 										label: res[i].name + ' / ' + keys[j]
 									}
 
-									if (nodetype == 'text' || nodetype == 'number' || nodetype == 'textarea' || nodetype == 'image') {
-										controlnodes.push(node)
-									} else if (nodetype == 'button') {
-										buttons.push(node)
-									} else if (nodetype == 'timecontrol') {
-										timers.push(node)
-									} else if (nodetype == 'checkbox') {
-										checkboxes.push(node)
+									if (node.type == 'text' || node.type == 'number' || node.type == 'textarea' || node.type == 'image') {
+										controlnodes.push(controlNode)
+									} else if (node.type == 'button') {
+										buttons.push(controlNode)
+									} else if (node.type == 'timecontrol') {
+										timers.push(controlNode)
+									} else if (node.type == 'checkbox') {
+										checkboxes.push(controlNode)
 									}
 								}
 							}
