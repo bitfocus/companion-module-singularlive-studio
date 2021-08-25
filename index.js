@@ -32,7 +32,7 @@ class instance extends instance_skel {
 
 			await this.SingularLive.Connect()
 				.catch(err => {
-					if (err.toLowerCase() == 'not found') {
+					if (err.toString().toLowerCase() == 'not found') {
 						const str = config.apiurl ? 'Invalid token' : 'Please enter a token'
 						this.log('warn', str)
 						throw new Error(str)
