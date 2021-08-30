@@ -10,9 +10,8 @@ class instance extends instance_skel {
 		super(system, id, config)
 		Object.assign(this, {
 			...actionUI,
-			...actions
+			...actions,
 		})
-
 
 		return this
 	}
@@ -30,17 +29,16 @@ class instance extends instance_skel {
 		try {
 			this.SingularLive = new api(config.apiurl)
 
-			await this.SingularLive.Connect()
-				.catch(err => {
-					if (err.toString().toLowerCase() == 'not found') {
-						const str = config.apiurl ? 'Invalid token' : 'Please enter a token'
-						this.log('warn', str)
-						throw new Error(str)
-					} else {
-						this.log('warn', err)
-						throw new Error(err)
-					}
-				})
+			await this.SingularLive.Connect().catch((err) => {
+				if (err.toString().toLowerCase() == 'not found') {
+					const str = config.apiurl ? 'Invalid token' : 'Please enter a token'
+					this.log('warn', str)
+					throw new Error(str)
+				} else {
+					this.log('warn', err)
+					throw new Error(err)
+				}
+			})
 
 			const compositions = []
 			const controlnodes = []
@@ -49,16 +47,16 @@ class instance extends instance_skel {
 			const timers = []
 
 			await this.SingularLive.getElements()
-				.then(res => {
+				.then((res) => {
 					for (let i = 0; i < res.length; i++) {
 						if (res[i].name) {
 							compositions.push({
 								id: res[i].name,
-								label: res[i].name
+								label: res[i].name,
 							})
 
 							if (res[i].nodes) {
-								let nodes = res[i].nodes.reduce(((r, c) => Object.assign(r, c)), {})
+								let nodes = res[i].nodes.reduce((r, c) => Object.assign(r, c), {})
 
 								const keys = Object.keys(nodes)
 								for (let j = 0; j < keys.length; j++) {
@@ -66,7 +64,7 @@ class instance extends instance_skel {
 
 									const controlNode = {
 										id: res[i].name + '&!&!&' + node.id,
-										label: res[i].name + ' / ' + keys[j]
+										label: res[i].name + ' / ' + keys[j],
 									}
 
 									if (node.type == 'text' || node.type == 'number' || node.type == 'textarea' || node.type == 'image') {
@@ -83,11 +81,15 @@ class instance extends instance_skel {
 						}
 					}
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.log('warn', err)
 					throw new Error(err)
 				})
-			this.system.emit('instance_actions', this.id, this.getActions(compositions, controlnodes, buttons, checkboxes, timers))
+			this.system.emit(
+				'instance_actions',
+				this.id,
+				this.getActions(compositions, controlnodes, buttons, checkboxes, timers)
+			)
 
 			this.status(this.STATUS_OK, 'OK')
 		} catch (e) {
@@ -107,7 +109,8 @@ class instance extends instance_skel {
 				id: 'info',
 				width: 12,
 				label: 'Information',
-				value: 'This module requires an API key to be filled in. This is generated in the Manage Access settings window from the Control application. \ni.e. https://app.singular.live/apiv1/control/172pQ2N1HLagEeayAci0Z4'
+				value:
+					'This module requires an API key to be filled in. This is generated in the Manage Access settings window from the Control application. \ni.e. https://app.singular.live/apiv1/control/172pQ2N1HLagEeayAci0Z4',
 			},
 			{
 				type: 'textinput',
@@ -115,7 +118,7 @@ class instance extends instance_skel {
 				label: 'API URL',
 				width: 12,
 				default: '',
-			}
+			},
 		]
 	}
 
@@ -135,8 +138,12 @@ class instance extends instance_skel {
 
 	action({ action, options }) {
 		this[action](options)
-			.then(() => { this.status(this.STATUS_OK, 'Ready') })
-			.catch((e) => { this.handleError(e) })
+			.then(() => {
+				this.status(this.STATUS_OK, 'Ready')
+			})
+			.catch((e) => {
+				this.handleError(e)
+			})
 	}
 }
 
