@@ -85,9 +85,7 @@ class instance extends instance_skel {
 					this.log('warn', err)
 					throw new Error(err)
 				})
-			this.system.emit(
-				'instance_actions',
-				this.id,
+			this.setActions(
 				this.getActions(compositions, controlnodes, buttons, checkboxes, timers)
 			)
 
