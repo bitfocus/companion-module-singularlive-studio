@@ -1,24 +1,33 @@
 {
-  "name": "singularlive-studio",
-  "version": "1.0.10",
-  "keywords": [
-    "Graphics"
-  ],
-  "manufacturer": "Singular.Live",
-  "product": "Studio",
-  "shortname": "singular",
-  "description": "Send API-request to Singular.Live controlling overlays",
-  "main": "index.js",
-  "author": "Fredrik Mediå <fredrik.mediaa@gmail.com>",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^6.1.0"
-  },
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+	"name": "singularlive-studio",
+	"version": "1.0.10",
+	"keywords": [
+		"Graphics"
+	],
+	"manufacturer": "Singular.Live",
+	"product": "Studio",
+	"shortname": "singular",
+	"description": "Send API-request to Singular.Live controlling overlays",
+	"main": "index.js",
+	"author": "Fredrik Mediå <fredrik.mediaa@gmail.com>",
+	"license": "MIT",
+	"dependencies": {},
+	"devDependencies": {
+		"eslint": "^6.1.0"
+	},
+	"directories": {
+		"lib": "lib"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"homepage": "https://github.com/bitfocus/companion-module-singularlive-studio#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-singularlive-studio/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-singularlive-studio.git"
+	},
+	"api_version": "1.0.0"
 }
