@@ -1,26 +1,44 @@
-const instance_skel = require('../../instance_skel')
+import { InstanceBase, runEntrypoint } from '@companion-module/base'
 
-const api = require('./lib/api')
+import { getActions } from './actions.js'
+import api from './lib/api.js'
 
-const actions = require('./lib/actions')
-const actionUI = require('./lib/actionsUI')
-
-class instance extends instance_skel {
-	constructor(system, id, config) {
-		super(system, id, config)
-		Object.assign(this, {
-			...actionUI,
-			...actions,
-		})
-
-		return this
+class SingularInstance extends InstanceBase {
+	constructor(internal) {
+		super(internal)
 	}
 
-	init() {
+	async init(config) {
+		this.config = config
+		this.updateStatus('connecting')
 		this.initSingularLive(this.config)
 	}
 
-	updateConfig(config) {
+	async destroy() {
+		this.log('debug', 'Singular module destroyed')
+	}
+
+	getConfigFields() {
+		return [
+			{
+				type: 'static-text',
+				id: 'info',
+				width: 12,
+				label: 'Information',
+				value:
+					'This module requires an API URL or token. This is generated in the Manage Access settings window from the Control application.',
+			},
+			{
+				type: 'textinput',
+				id: 'apiurl',
+				label: 'API URL / Token',
+				width: 12,
+				default: '',
+			},
+		]
+	}
+
+	async configUpdated(config) {
 		this.config = config
 		this.initSingularLive(this.config)
 	}
@@ -31,7 +49,9 @@ class instance extends instance_skel {
 
 			await this.SingularLive.Connect().catch((err) => {
 				if (err.toString().toLowerCase() == 'not found') {
-					const str = config.apiurl ? 'Invalid token' : 'Please enter a token'
+					const str = config.apiurl
+						? 'Invalid token'
+						: 'This module requires an API URL or token. See help for details.'
 					this.log('warn', str)
 					throw new Error(str)
 				} else {
@@ -54,7 +74,6 @@ class instance extends instance_skel {
 								id: res[i].name,
 								label: res[i].name,
 							})
-
 							if (res[i].nodes) {
 								let nodes = res[i].nodes.reduce((r, c) => Object.assign(r, c), {})
 
@@ -85,44 +104,19 @@ class instance extends instance_skel {
 					this.log('warn', err)
 					throw new Error(err)
 				})
-			this.setActions(
-				this.getActions(compositions, controlnodes, buttons, checkboxes, timers)
-			)
 
-			this.status(this.STATUS_OK, 'OK')
+			this.setActionDefinitions(getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers))
+
+			this.updateStatus('ok')
 		} catch (e) {
-			this.debug(e.message)
-			this.status(this.STATUS_WARNING, e.message)
+			this.log('debug', e.message)
+			this.updateStatus('connection_failure')
 		}
-	}
-
-	destroy() {
-		this.debug('destroy', this.id)
-	}
-
-	config_fields() {
-		return [
-			{
-				type: 'text',
-				id: 'info',
-				width: 12,
-				label: 'Information',
-				value:
-					'This module requires an API key to be filled in. This is generated in the Manage Access settings window from the Control application. \ni.e. https://app.singular.live/apiv1/control/172pQ2N1HLagEeayAci0Z4',
-			},
-			{
-				type: 'textinput',
-				id: 'apiurl',
-				label: 'API URL',
-				width: 12,
-				default: '',
-			},
-		]
 	}
 
 	handleConnectionError() {
 		this.log('error', 'Singular.Live connection lost')
-		this.status(this.STATUS_ERROR, 'Connection error')
+		this.updateStatus('connection_failure')
 	}
 
 	handleError(error) {
@@ -130,14 +124,14 @@ class instance extends instance_skel {
 			return this.handleConnectionError()
 		} else {
 			this.log('error', error.message)
-			this.debug(error)
+			this.log('debug', error)
 		}
 	}
 
 	action({ action, options }) {
 		this[action](options)
 			.then(() => {
-				this.status(this.STATUS_OK, 'Ready')
+				this.updateStatus('ok')
 			})
 			.catch((e) => {
 				this.handleError(e)
@@ -145,4 +139,4 @@ class instance extends instance_skel {
 	}
 }
 
-exports = module.exports = instance
+runEntrypoint(SingularInstance, [])
