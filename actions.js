@@ -8,7 +8,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					label: 'Composition',
 					id: 'comp',
 					choices: compositions,
-					default: 'Select composition',
+					default: compositions?.[0]?.id,
 				},
 			],
 			callback: async (action) => {
@@ -23,7 +23,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					label: 'Composition',
 					id: 'comp',
 					choices: compositions,
-					default: 'Select composition',
+					default: compositions?.[0]?.id,
 				},
 			],
 			callback: async (action) => {
@@ -38,7 +38,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					label: 'Control Node',
 					id: 'controlnode',
 					choices: controlnodes,
-					default: 'Select control node',
+					default: controlnodes?.[0]?.id,
 				},
 				{
 					type: 'textinput',
@@ -60,7 +60,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					label: 'Button',
 					id: 'controlnode',
 					choices: buttons,
-					default: 'Select button node',
+					default: buttons?.[0]?.id,
 				},
 			],
 			callback: async (action) => {
@@ -75,7 +75,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					label: 'Control Node',
 					id: 'controlnode',
 					choices: checkboxes,
-					default: 'Select checkbox node',
+					default: checkboxes?.[0]?.id,
 				},
 				{
 					type: 'checkbox',
@@ -95,7 +95,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					label: 'Control Node',
 					id: 'controlnode',
 					choices: timers,
-					default: 'Select timer control',
+					default: timers?.[0]?.id,
 				},
 				{
 					type: 'dropdown',
@@ -115,11 +115,25 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 							label: 'Reset',
 						},
 					],
-					default: 'Select action',
+					default: 'play',
 				},
 			],
 			callback: async (action) => {
 				await this.SingularLive.updateTimer(action.options.controlnode, action.options.value)
+			},
+		},
+		takeOutAllOutput: {
+			name: 'Take Out All Output',
+			options: [],
+			callback: async () => {
+				await this.SingularLive.takeOutAllOutput()
+			},
+		},
+		refreshComposition: {
+			name: 'Refresh Composition',
+			options: [],
+			callback: async () => {
+				await this.SingularLive.refreshComposition()
 			},
 		},
 	}

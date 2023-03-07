@@ -1,7 +1,7 @@
 import { InstanceBase, runEntrypoint } from '@companion-module/base'
 
-import getActions from 'actions.js'
-import api from ('./lib/api.js')
+import { getActions } from './actions.js'
+import api from './lib/api.js'
 
 class SingularInstance extends InstanceBase {
 	constructor(internal) {
@@ -21,17 +21,17 @@ class SingularInstance extends InstanceBase {
 	getConfigFields() {
 		return [
 			{
-				type: ' static-text',
+				type: 'static-text',
 				id: 'info',
 				width: 12,
 				label: 'Information',
 				value:
-					'This module requires an API key to be filled in. This is generated in the Manage Access settings window from the Control application. \ni.e. https://app.singular.live/apiv1/control/172pQ2N1HLagEeayAci0Z4',
+					'This module requires an API URL or token. This is generated in the Manage Access settings window from the Control application.',
 			},
 			{
 				type: 'textinput',
 				id: 'apiurl',
-				label: 'API URL',
+				label: 'API URL / Token',
 				width: 12,
 				default: '',
 			},
@@ -49,7 +49,9 @@ class SingularInstance extends InstanceBase {
 
 			await this.SingularLive.Connect().catch((err) => {
 				if (err.toString().toLowerCase() == 'not found') {
-					const str = config.apiurl ? 'Invalid token' : 'Please enter a token'
+					const str = config.apiurl
+						? 'Invalid token'
+						: 'This module requires an API URL or token. See help for details.'
 					this.log('warn', str)
 					throw new Error(str)
 				} else {
@@ -72,7 +74,6 @@ class SingularInstance extends InstanceBase {
 								id: res[i].name,
 								label: res[i].name,
 							})
-
 							if (res[i].nodes) {
 								let nodes = res[i].nodes.reduce((r, c) => Object.assign(r, c), {})
 
@@ -103,6 +104,7 @@ class SingularInstance extends InstanceBase {
 					this.log('warn', err)
 					throw new Error(err)
 				})
+
 			this.setActionDefinitions(getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers))
 
 			this.updateStatus('ok')
