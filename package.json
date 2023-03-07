@@ -12,8 +12,7 @@
 		"node-fetch": "^3.3.0"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^1.2.0",
-		"eslint": "^6.1.0"
+		"@companion-module/tools": "^1.2.0"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"directories": {
