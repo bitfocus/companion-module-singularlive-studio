@@ -1,33 +1,26 @@
 {
 	"name": "singularlive-studio",
-	"version": "1.0.11",
-	"keywords": [
-		"Graphics"
-	],
-	"manufacturer": "Singular.Live",
-	"product": "Studio",
-	"shortname": "singular",
-	"description": "Send API-request to Singular.Live controlling overlays",
+	"version": "2.0.0",
 	"main": "index.js",
-	"author": "Fredrik Mediå <fredrik.mediaa@gmail.com>",
 	"license": "MIT",
-	"dependencies": {},
+	"type": "module",
+	"scripts": {
+		"format": "prettier -w ."
+	},
+	"dependencies": {
+		"@companion-module/base": "~1.3.0",
+		"node-fetch": "^3.3.0"
+	},
 	"devDependencies": {
+		"@companion-module/tools": "^1.2.0",
 		"eslint": "^6.1.0"
 	},
+	"prettier": "@companion-module/tools/.prettierrc.json",
 	"directories": {
 		"lib": "lib"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"homepage": "https://github.com/bitfocus/companion-module-singularlive-studio#readme",
-	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-singularlive-studio/issues"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/bitfocus/companion-module-singularlive-studio.git"
-	},
-	"api_version": "1.0.0"
+	}
 }
