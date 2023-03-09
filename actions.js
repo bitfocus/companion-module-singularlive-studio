@@ -1,4 +1,4 @@
-export function getActions(compositions, controlnodes, buttons, checkboxes, timers) {
+export function getActions(compositions, controlnodes, buttons, checkboxes, timers, selections) {
 	return {
 		animateIn: {
 			name: 'Animate In',
@@ -120,6 +120,33 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 			],
 			callback: async (action) => {
 				await this.SingularLive.updateTimer(action.options.controlnode, action.options.value)
+			},
+		},
+		updateSelectionNode: {
+			name: 'Update Selection Node',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Control Node',
+					id: 'controlnode',
+					choices: selections,
+					default: selections?.[0]?.id,
+					allowCustom: false,
+				},
+				...selections.map((selection) => ({
+					type: 'dropdown',
+					label: 'Selection',
+					id: selection.id,
+					choices: selection.selections,
+					default: selection.selections?.[0]?.id,
+					isVisible: new Function('options', `return options.controlnode == '${selection.id}'`),
+				})),
+			],
+			callback: async (action) => {
+				await this.SingularLive.updateControlNode(
+					action.options.controlnode,
+					action.options[action.options.controlnode]
+				)
 			},
 		},
 		takeOutAllOutput: {
