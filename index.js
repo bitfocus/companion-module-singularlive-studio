@@ -65,6 +65,7 @@ class SingularInstance extends InstanceBase {
 			const buttons = []
 			const checkboxes = []
 			const timers = []
+			const selections = []
 
 			await this.SingularLive.getElements()
 				.then((res) => {
@@ -94,6 +95,14 @@ class SingularInstance extends InstanceBase {
 										timers.push(controlNode)
 									} else if (node.type == 'checkbox') {
 										checkboxes.push(controlNode)
+									} else if (node.type == 'selection') {
+										selections.push({
+											...controlNode,
+											selections: node.selections.map((selection) => ({
+												id: selection.id,
+												label: selection.title,
+											})),
+										})
 									}
 								}
 							}
@@ -105,7 +114,9 @@ class SingularInstance extends InstanceBase {
 					throw new Error(err)
 				})
 
-			this.setActionDefinitions(getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers))
+			this.setActionDefinitions(
+				getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers, selections)
+			)
 
 			this.updateStatus('ok')
 		} catch (e) {
