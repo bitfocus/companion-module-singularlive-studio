@@ -98,7 +98,7 @@ class SingularInstance extends InstanceBase {
 									} else if (node.type == 'selection') {
 										selections.push({
 											...controlNode,
-											selections: node.selections.map((selection) => ({
+											selections: node.selections?.map((selection) => ({
 												id: selection.id,
 												label: selection.title,
 											})),
@@ -110,7 +110,8 @@ class SingularInstance extends InstanceBase {
 					}
 				})
 				.catch((err) => {
-					this.log('warn', err)
+					this.log('debug', err)
+					this.log('warn', err.toString())
 					throw new Error(err)
 				})
 
