@@ -11,4 +11,6 @@ See [HELP.md](./companion/HELP.md) and LICENSE
   - Updated to Singular API 2.0
 - Features
   - Added Take Out All Output action
-  - Refresh Composition
+  - Refresh Composition action
+  - Update Selection Node action
+  - Root Composition is now included in composition list
