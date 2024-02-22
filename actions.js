@@ -1,4 +1,4 @@
-export function getActions(compositions, controlnodes, buttons, checkboxes, timers, selections) {
+export function getActions(compositions, controlnodes, buttons, checkboxes, timers, selections, colors) {
 	return {
 		animateIn: {
 			name: 'Animate In',
@@ -68,7 +68,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 			},
 		},
 		updateCheckboxNode: {
-			name: 'Update Checkbox Node',
+			name: 'Update Checkbox Field',
 			options: [
 				{
 					type: 'dropdown',
@@ -88,7 +88,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 			},
 		},
 		updateTimerNode: {
-			name: 'Update Timer Control',
+			name: 'Update Time Control Field',
 			options: [
 				{
 					type: 'dropdown',
@@ -123,7 +123,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 			},
 		},
 		updateSelectionNode: {
-			name: 'Update Selection Node',
+			name: 'Update Selection Field',
 			options: [
 				{
 					type: 'dropdown',
@@ -147,6 +147,45 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 					action.options.controlnode,
 					action.options[action.options.controlnode]
 				)
+			},
+		},
+		updateColorNode: {
+			name: 'Update Color Field',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Control Node',
+					id: 'controlnode',
+					choices: colors,
+					default: colors?.[0]?.id,
+				},
+				{
+					type: 'colorpicker',
+					label: 'Value',
+					id: 'value',
+					enableAlpha: true,
+					returnType: 'string',
+					default: 'rgba(255, 255, 255, 1)',
+				},
+			],
+			callback: async (action) => {
+				let color = action.options.value
+				let values = color.match(/\(([^()]*)\)/g)
+				let colorArray = []
+				if (values[0]) {
+					values[0] = values[0].replace('(', '')
+					values[0] = values[0].replace(')', '')
+					colorArray = values[0].split(',')
+				}
+				if (colorArray.length == 4) {
+					let colorData = {
+						r: colorArray[0],
+						g: colorArray[1],
+						b: colorArray[2],
+						a: colorArray[3],
+					}
+					await this.SingularLive.updateColorNode(action.options.controlnode, colorData)
+				}
 			},
 		},
 		takeOutAllOutput: {

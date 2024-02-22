@@ -4,6 +4,11 @@ See [HELP.md](./companion/HELP.md) and LICENSE
 
 ## Changelog
 
+### v2.1.0
+
+- New
+  - Add Control Color Field action
+
 ### v2.0.1
 
 - Minor
