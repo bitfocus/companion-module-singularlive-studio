@@ -7,7 +7,7 @@ See [HELP.md](./companion/HELP.md) and LICENSE
 ### v2.1.0
 
 - New
-  - Add Control Color Node action
+  - Add Control Color Field action
 
 ### v2.0.1
 

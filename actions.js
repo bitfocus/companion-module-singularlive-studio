@@ -145,7 +145,7 @@ export function getActions(compositions, controlnodes, buttons, checkboxes, time
 			callback: async (action) => {
 				await this.SingularLive.updateControlNode(
 					action.options.controlnode,
-					action.options[action.options.controlnode],
+					action.options[action.options.controlnode]
 				)
 			},
 		},
