@@ -66,6 +66,7 @@ class SingularInstance extends InstanceBase {
 			const checkboxes = []
 			const timers = []
 			const selections = []
+			const colors = []
 
 			await this.SingularLive.getElements()
 				.then((res) => {
@@ -87,22 +88,36 @@ class SingularInstance extends InstanceBase {
 										label: res[i].name + ' / ' + keys[j],
 									}
 
-									if (node.type == 'text' || node.type == 'number' || node.type == 'textarea' || node.type == 'image') {
-										controlnodes.push(controlNode)
-									} else if (node.type == 'button') {
-										buttons.push(controlNode)
-									} else if (node.type == 'timecontrol') {
-										timers.push(controlNode)
-									} else if (node.type == 'checkbox') {
-										checkboxes.push(controlNode)
-									} else if (node.type == 'selection') {
-										selections.push({
-											...controlNode,
-											selections: node.selections?.map((selection) => ({
-												id: selection.id,
-												label: selection.title,
-											})),
-										})
+									switch (node.type) {
+										case 'text':
+										case 'number':
+										case 'textarea':
+										case 'image':
+											controlnodes.push(controlNode)
+											break
+										case 'button':
+											buttons.push(controlNode)
+											break
+										case 'timecontrol':
+											timers.push(controlNode)
+											break
+										case 'checkbox':
+											checkboxes.push(controlNode)
+											break
+										case 'color':
+											colors.push(controlNode)
+											break
+										case 'selection':
+											selections.push({
+												...controlNode,
+												selections: node.selections?.map((selection) => ({
+													id: selection.id,
+													label: selection.title,
+												})),
+											})
+											break
+										default:
+											controlnodes.push(controlNode)
 									}
 								}
 							}
@@ -116,7 +131,7 @@ class SingularInstance extends InstanceBase {
 				})
 
 			this.setActionDefinitions(
-				getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers, selections)
+				getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers, selections, colors)
 			)
 
 			this.updateStatus('ok')
