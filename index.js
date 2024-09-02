@@ -131,7 +131,7 @@ class SingularInstance extends InstanceBase {
 				})
 
 			this.setActionDefinitions(
-				getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers, selections, colors)
+				getActions.bind(this)(compositions, controlnodes, buttons, checkboxes, timers, selections, colors),
 			)
 
 			this.updateStatus('ok')

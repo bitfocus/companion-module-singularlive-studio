@@ -3,7 +3,7 @@
 	"name": "singularlive-studio",
 	"shortname": "singular",
 	"description": "Control Singular.Live Studio",
-	"version": "2.1.0",
+	"version": "0.0.0",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-singularlive-studio.git",
 	"bugs": "https://github.com/bitfocus/companion-module-singularlive-studio/issues",

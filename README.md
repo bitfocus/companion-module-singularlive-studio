@@ -4,6 +4,11 @@ See [HELP.md](./companion/HELP.md) and LICENSE
 
 ## Changelog
 
+### v2.1.1
+
+- Minor
+  - Updated dependencies to the latest version
+
 ### v2.1.0
 
 - New
