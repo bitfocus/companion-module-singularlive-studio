@@ -77,15 +77,31 @@ class SingularInstance extends InstanceBase {
 								label: res[i].name,
 							})
 							if (res[i].nodes) {
-								let nodes = res[i].nodes.reduce((r, c) => Object.assign(r, c), {})
+								// Keep track of seen titles, and add duplictaes to a set.
+								// This is done before looping through the nodes so the 1st appearance
+								// of a duplicate title also has the id appended
+								const titles = new Set()
+								const duplicateTitles = new Set()
 
-								const keys = Object.keys(nodes)
-								for (let j = 0; j < keys.length; j++) {
-									const node = nodes[keys[j]]
+								let nodes = res[i].nodes.reduce((r, c) => {
+									const title = Object.values(c)[0].title
+									const titleSeenBefore = titles.has(title)
+									if (titleSeenBefore) {
+										duplicateTitles.add(title)
+									} else {
+										titles.add(title)
+									}
+									return Object.assign(r, c)
+								}, {})
+
+								const nodeIds = Object.keys(nodes)
+								for (let j = 0; j < nodeIds.length; j++) {
+									const node = nodes[nodeIds[j]]
+									const nodeLabel = duplicateTitles.has(node.title) ? `${node.title} (${node.id})` : node.title
 
 									const controlNode = {
 										id: res[i].name + '&!&!&' + node.id,
-										label: res[i].name + ' / ' + keys[j],
+										label: res[i].name + ' / ' + nodeLabel,
 									}
 
 									switch (node.type) {
