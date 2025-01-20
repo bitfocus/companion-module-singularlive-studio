@@ -1,6 +1,6 @@
 {
 	"name": "singularlive-studio",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"main": "index.js",
 	"license": "MIT",
 	"repository": {
@@ -9,15 +9,23 @@
 	},
 	"type": "module",
 	"scripts": {
-		"format": "prettier -w ."
+		"format": "prettier -w .",
+		"package": "companion-module-build",
+		"lint:raw": "eslint",
+		"lint": "yarn lint:raw ."
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.10.0",
+		"@companion-module/base": "~1.11.3",
+		"eslint": "^9.18.0",
 		"node-fetch": "^3.3.2"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^2.0.0",
-		"prettier": "^3.3.3"
+		"@companion-module/tools": "^2.1.1",
+		"prettier": "^3.4.2"
 	},
-	"prettier": "@companion-module/tools/.prettierrc.json"
+	"engines": {
+		"node": "^22.12"
+	},
+	"prettier": "@companion-module/tools/.prettierrc.json",
+	"packageManager": "yarn@4.5.3"
 }
