@@ -4,6 +4,11 @@ See [HELP.md](./companion/HELP.md) and LICENSE
 
 ## Changelog
 
+### v2.1.2
+
+- Fix
+  - Collect control nodes by ID instead of title
+
 ### v2.1.1
 
 - Minor
