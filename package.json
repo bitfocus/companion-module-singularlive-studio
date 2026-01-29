@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"@companion-module/base": "~1.11.3",
-		"eslint": "^9.18.0",
+		"eslint": "^9.26.0",
 		"node-fetch": "^3.3.2"
 	},
 	"devDependencies": {
